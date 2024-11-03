@@ -10,28 +10,45 @@
 function yt_perma_live_stream_embed_shortcode($atts) {
     $options = get_option('yt_perma_live_stream_embed_options');
     $apiKey = $options['api_key'] ?? '';
-    $channelId = $options['channel_id'] ?? '';
+    $channelId = $options['channel_id'] ?? ''; // Lofi Girl test channel ID: UCSJ4gkVC6NrvII8umztf0Ow
 
     if (empty($apiKey) || empty($channelId)) {
-        return "YouTube API Key or Channel ID not set.";
+        return "<p>YT Perma Live Stream Embed settings are missing.</p>";
     }
 
     $apiUrl = sprintf('https://www.googleapis.com/youtube/v3/search?key=%s&channelId=%s&part=snippet&type=video&eventType=live&order=date&maxResults=1', $apiKey, $channelId);
 
-    $response = wp_remote_get($apiUrl);
+    // Set up the args with custom referrer
+    $args = [
+        'headers' => [
+            'Referer' => home_url(),
+        ],
+    ];
+
+    $response = wp_remote_get($apiUrl, $args);
 
     if (is_wp_error($response)) {
-        return "Failed to retrieve data.";
+        // Retrieve response code and message
+        $response_code = wp_remote_retrieve_response_code($response);
+        $response_message = wp_remote_retrieve_response_message($response);
+        $response_body = wp_remote_retrieve_body($response);
+
+        // Log details
+        error_log('YouTube API Response Code: ' . $response_code);
+        error_log('YouTube API Response Message: ' . $response_message);
+        error_log('YouTube API Response Body: ' . $response_body);
+
+        return "<p>YT Perma Live Stream Embed could not retrieve YouTube data. Check error logs for more details.</p>";
     }
 
     $data = json_decode(wp_remote_retrieve_body($response), true);
 
     if (empty($data['items'])) {
-        return "No live streams are currently active.";
+        return "<p>Stream is not live right now.</p>";
     }
 
     $videoId = $data['items'][0]['id']['videoId'];
-    $embedHtml = sprintf('<div style="position:relative;padding-bottom:56.25%;overflow:hidden;height:0;max-width:100%;"><iframe width="1280"" height="720" src="https://www.youtube.com/embed/%s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>', $videoId);
+    $embedHtml = '<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;"><iframe width="1280" height="720" src="https://www.youtube.com/embed/' . $videoId . '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
 
     return $embedHtml;
 }
@@ -58,7 +75,7 @@ function yt_perma_live_stream_embed_settings_page() {
         <form method="post" action="options.php">
             <?php
             settings_fields('yt_perma_live_stream_embed_options_group');
-            do_settings_sections('youtube_live_embed');
+            do_settings_sections('yt_perma_live_stream_embed');
             submit_button();
             ?>
         </form>
@@ -74,14 +91,14 @@ function yt_perma_live_stream_embed_settings_init() {
         'yt_perma_live_stream_embed_section',
         'YouTube API Settings',
         null,
-        'youtube_live_embed'
+        'yt_perma_live_stream_embed'
     );
 
     add_settings_field(
         'yt_perma_live_stream_embed_api_key',
         'YouTube API Key',
         'yt_perma_live_stream_embed_api_key_render',
-        'youtube_live_embed',
+        'yt_perma_live_stream_embed',
         'yt_perma_live_stream_embed_section'
     );
 
@@ -89,7 +106,7 @@ function yt_perma_live_stream_embed_settings_init() {
         'yt_perma_live_stream_embed_channel_id',
         'YouTube Channel ID',
         'yt_perma_live_stream_embed_channel_id_render',
-        'youtube_live_embed',
+        'yt_perma_live_stream_embed',
         'yt_perma_live_stream_embed_section'
     );
 }
