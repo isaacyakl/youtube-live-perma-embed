@@ -4,6 +4,7 @@
  * Description: Embed a channel's latest YouTube live stream.
  * Version: 1.0
  * Author: yak
+ * Author URI: https://isaacyakl.com
  * License: GPL3
  */
 
@@ -174,4 +175,14 @@ function yt_perma_live_stream_embed_channel_id_render() {
     </p>
     <?php
 }
+
+// Add a settings link on the plugin page
+function yt_perma_live_stream_action_links($links) {
+    $settings_link = '<a href="' . admin_url('options-general.php?page=yt-perma-live-stream-embed') . '">Settings</a>';
+    array_unshift($links, $settings_link); 
+    return $links;
+}
+// Add the action link filter
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'yt_perma_live_stream_action_links');
+
 ?>
