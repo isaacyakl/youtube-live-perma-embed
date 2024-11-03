@@ -13,7 +13,11 @@ function yt_perma_live_stream_embed_shortcode($atts) {
     $channelId = $options['channel_id'] ?? ''; // Lofi Girl test channel ID: UCSJ4gkVC6NrvII8umztf0Ow
 
     if (empty($apiKey) || empty($channelId)) {
-        return "<p>YT Perma Live Stream Embed settings are missing.</p>";
+        $settings_url = admin_url('options-general.php?page=yt-perma-live-stream-embed');
+        return sprintf(
+            '<p>YT Perma Live Stream Embed settings are missing. Please configure <a href="%s">plugin settings</a>.</p>',
+            esc_url($settings_url)
+        );
     }
 
     $apiUrl = sprintf('https://www.googleapis.com/youtube/v3/search?key=%s&channelId=%s&part=snippet&type=video&eventType=live&order=date&maxResults=1', $apiKey, $channelId);

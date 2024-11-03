@@ -1,0 +1,1 @@
+GET https://www.googleapis.com/youtube/v3/search?key=<API_KEY>&channelId=UCSJ4gkVC6NrvII8umztf0Ow&part=snippet&type=video&eventType=live&order=date&maxResults=1 HTTP/1.1
