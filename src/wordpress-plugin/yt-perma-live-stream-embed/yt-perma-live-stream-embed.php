@@ -11,6 +11,18 @@ function yt_perma_live_stream_embed_shortcode($atts) {
     $options = get_option('yt_perma_live_stream_embed_options');
     $apiKey = $options['api_key'] ?? '';
     $channelId = $options['channel_id'] ?? ''; // Lofi Girl test channel ID: UCSJ4gkVC6NrvII8umztf0Ow
+    
+    // Set default width and height, can be overridden by shortcode attributes
+    $default_width = '1280';
+    $default_height = '720';
+    // Extract shortcode attributes
+    $attributes = shortcode_atts(
+        [
+            'width' => $default_width,
+            'height' => $default_height,
+        ],
+        $atts
+    );
 
     if (empty($apiKey) || empty($channelId)) {
         $settings_url = admin_url('options-general.php?page=yt-perma-live-stream-embed');
@@ -52,7 +64,12 @@ function yt_perma_live_stream_embed_shortcode($atts) {
     }
 
     $videoId = $data['items'][0]['id']['videoId'];
-    $embedHtml = '<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;"><iframe width="1280" height="720" src="https://www.youtube.com/embed/' . $videoId . '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
+    $embedHtml = sprintf(
+        '<div style="left: 0; width: 100%%; height: 0; position: relative; padding-bottom: 56.25%%;"><iframe width="%s" height="%s" src="https://www.youtube.com/embed/%s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>',
+        esc_attr($attributes['width']),
+        esc_attr($attributes['height']),
+        esc_attr($videoId)
+    );
 
     return $embedHtml;
 }
