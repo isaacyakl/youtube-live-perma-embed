@@ -8,6 +8,7 @@
  */
 
 function yt_perma_live_stream_embed_shortcode($atts) {
+    $plugin_name = 'YT Perma Live Stream Embed';
     $options = get_option('yt_perma_live_stream_embed_options');
     $apiKey = $options['api_key'] ?? '';
     $channelId = $options['channel_id'] ?? ''; // Lofi Girl test channel ID: UCSJ4gkVC6NrvII8umztf0Ow
@@ -30,7 +31,8 @@ function yt_perma_live_stream_embed_shortcode($atts) {
     if (empty($apiKey) || empty($channelId)) {
         $settings_url = admin_url('options-general.php?page=yt-perma-live-stream-embed');
         return sprintf(
-            '<p>YT Perma Live Stream Embed settings are missing. Please configure <a href="%s">plugin settings</a>.</p>',
+            '<p>%s settings are missing. Please configure <a href="%s" rel="nofollow">plugin settings</a>.</p>',
+            $plugin_name,
             esc_url($settings_url)
         );
     }
@@ -53,11 +55,11 @@ function yt_perma_live_stream_embed_shortcode($atts) {
         $response_body = wp_remote_retrieve_body($response);
 
         // Log details
-        error_log('YouTube API Response Code: ' . $response_code);
-        error_log('YouTube API Response Message: ' . $response_message);
-        error_log('YouTube API Response Body: ' . $response_body);
+        error_log($plugin_name . ' YouTube API Response Code: ' . $response_code);
+        error_log($plugin_name . ' YouTube API Response Message: ' . $response_message);
+        error_log($plugin_name . ' YouTube API Response Body: ' . $response_body);
 
-        return "<p>YT Perma Live Stream Embed could not retrieve YouTube data. Check error logs for more details.</p>";
+        return sprintf("<p>%s could not retrieve YouTube data. Check error logs for more details.</p>", $plugin_name);
     }
 
     $data = json_decode(wp_remote_retrieve_body($response), true);
@@ -86,9 +88,10 @@ add_shortcode('yt-perma-live-stream-embed', 'yt_perma_live_stream_embed_shortcod
 
 // Create settings page
 function yt_perma_live_stream_embed_menu() {
+    global $plugin_name;
     add_options_page(
-        'YT Perma Live Stream Embed Settings',
-        'YT Perma Live Stream Embed',
+        $plugin_name . ' Settings',
+        $plugin_name,
         'manage_options',
         'yt-perma-live-stream-embed',
         'yt_perma_live_stream_embed_settings_page'
@@ -98,9 +101,10 @@ add_action('admin_menu', 'yt_perma_live_stream_embed_menu');
 
 // Render settings page
 function yt_perma_live_stream_embed_settings_page() {
+    global $plugin_name;
     ?>
     <div class="wrap">
-        <h1>YT Perma Live Stream Embed Settings</h1>
+        <h1><?php echo $plugin_name; ?> Settings</h1>
         <form method="post" action="options.php">
             <?php
             settings_fields('yt_perma_live_stream_embed_options_group');
