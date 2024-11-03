@@ -146,6 +146,9 @@ function yt_perma_live_stream_embed_api_key_render() {
     $options = get_option('yt_perma_live_stream_embed_options');
     ?>
     <input type="text" name="yt_perma_live_stream_embed_options[api_key]" value="<?php echo isset($options['api_key']) ? esc_attr($options['api_key']) : ''; ?>" size="50">
+    <p>
+        <a href="https://youtu.be/ZCfrNvu6nMc" target="_blank">How to create a YouTube API key</a>
+    </p>
     <?php
 }
 
@@ -153,6 +156,9 @@ function yt_perma_live_stream_embed_channel_id_render() {
     $options = get_option('yt_perma_live_stream_embed_options');
     ?>
     <input type="text" name="yt_perma_live_stream_embed_options[channel_id]" value="<?php echo isset($options['channel_id']) ? esc_attr($options['channel_id']) : ''; ?>" size="50">
+    <p>
+        <a href="https://support.google.com/youtube/answer/3250431" target="_blank">How to find a YouTube channel ID</a>
+    </p>
     <?php
 }
 ?>
