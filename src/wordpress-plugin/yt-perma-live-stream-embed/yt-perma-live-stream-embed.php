@@ -9,6 +9,10 @@
  */
 
 $plugin_name = 'YT Perma Live Stream Embed';
+$plugin_version = '1.0';
+$plugin_author = 'yak';
+$plugin_author_uri = 'https://isaacyakl.com';
+$plugin_source_code_uri = 'https://github.com/isaacyakl/yt-perma-live-stream-embed';
 
 function yt_perma_live_stream_embed_shortcode($atts) {
     global $plugin_name;
@@ -110,7 +114,7 @@ add_action('admin_menu', 'yt_perma_live_stream_embed_menu');
 
 // Render settings page
 function yt_perma_live_stream_embed_settings_page() {
-    global $plugin_name;
+    global $plugin_name, $plugin_version, $plugin_author, $plugin_author_uri, $plugin_source_code_uri;
     ?>
     <div class="wrap">
         <h1><?php echo $plugin_name; ?> Settings</h1>
@@ -121,6 +125,12 @@ function yt_perma_live_stream_embed_settings_page() {
             submit_button();
             ?>
         </form>
+        <p style="margin-top: 20px; font-size: 0.9em;">
+            <strong><?php echo $plugin_name; ?> v<?php echo $plugin_version; ?></strong><br>
+            Developed by <a href="<?php echo $plugin_author_uri; ?>" target="_blank"><?php echo $plugin_author; ?></a><br>
+            <br>
+            <a href="<?php echo $plugin_source_code_uri; ?>" target="_blank">View Source Code</a>
+        </p>
     </div>
     <?php
 }
@@ -160,7 +170,7 @@ function yt_perma_live_stream_embed_api_key_render() {
     ?>
     <input type="text" name="yt_perma_live_stream_embed_options[api_key]" value="<?php echo isset($options['api_key']) ? esc_attr($options['api_key']) : ''; ?>" size="50">
     <p>
-        <a href="https://youtu.be/ZCfrNvu6nMc" target="_blank">How to create a YouTube API key</a>
+        <a href="https://youtu.be/ZCfrNvu6nMc" target="_blank" rel="nofollow">How to create a YouTube API key</a>
     </p>
     <?php
 }
@@ -170,7 +180,7 @@ function yt_perma_live_stream_embed_channel_id_render() {
     ?>
     <input type="text" name="yt_perma_live_stream_embed_options[channel_id]" value="<?php echo isset($options['channel_id']) ? esc_attr($options['channel_id']) : ''; ?>" size="50">
     <p>
-        <a href="https://support.google.com/youtube/answer/3250431" target="_blank">How to find a YouTube channel ID</a>
+        <a href="https://support.google.com/youtube/answer/3250431" target="_blank" rel="nofollow">How to find a YouTube channel ID</a>
     </p>
     <?php
 }
