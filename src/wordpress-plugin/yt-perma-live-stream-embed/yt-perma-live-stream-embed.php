@@ -7,8 +7,10 @@
  * License: GPL3
  */
 
+$plugin_name = 'YT Perma Live Stream Embed';
+
 function yt_perma_live_stream_embed_shortcode($atts) {
-    $plugin_name = 'YT Perma Live Stream Embed';
+    global $plugin_name;
     $options = get_option('yt_perma_live_stream_embed_options');
     $apiKey = $options['api_key'] ?? '';
     $channelId = $options['channel_id'] ?? ''; // Lofi Girl test channel ID: UCSJ4gkVC6NrvII8umztf0Ow
