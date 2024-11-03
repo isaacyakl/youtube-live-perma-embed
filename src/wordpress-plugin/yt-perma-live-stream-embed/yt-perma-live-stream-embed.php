@@ -25,7 +25,6 @@ function yt_perma_live_stream_embed_shortcode($atts) {
         [
             'width' => $default_width,
             'height' => $default_height,
-            'responsive' => $default_responsive,
         ],
         $atts
     );
