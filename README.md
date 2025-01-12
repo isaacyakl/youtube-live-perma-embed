@@ -1,2 +1,3 @@
-# yt-perma-live-stream-embed
+# YouTube Live Perma Embed
+
 Embed a channel's latest YouTube live stream.

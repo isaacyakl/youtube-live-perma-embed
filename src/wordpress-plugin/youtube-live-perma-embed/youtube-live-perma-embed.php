@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: YT Perma Live Stream Embed
+ * Plugin Name: YouTube Live Perma Embed
  * Description: Embed a channel's latest YouTube live stream.
  * Version: 1.0
  * Author: yak
@@ -8,15 +8,15 @@
  * License: GPL3
  */
 
-$plugin_name = 'YT Perma Live Stream Embed';
+$plugin_name = 'YouTube Live Perma Embed';
 $plugin_version = '1.0';
 $plugin_author = 'yak';
 $plugin_author_uri = 'https://isaacyakl.com';
-$plugin_source_code_uri = 'https://github.com/isaacyakl/yt-perma-live-stream-embed';
+$plugin_source_code_uri = 'https://github.com/isaacyakl/youtube-live-perma-embed';
 
-function yt_perma_live_stream_embed_shortcode($atts) {
+function youtube_live_perma_embed_shortcode($atts) {
     global $plugin_name;
-    $options = get_option('yt_perma_live_stream_embed_options');
+    $options = get_option('youtube_live_perma_embed_options');
     $apiKey = $options['api_key'] ?? '';
     $channelId = $options['channel_id'] ?? ''; // Lofi Girl test channel ID: UCSJ4gkVC6NrvII8umztf0Ow
     
@@ -34,7 +34,7 @@ function yt_perma_live_stream_embed_shortcode($atts) {
     );
 
     if (empty($apiKey) || empty($channelId)) {
-        $settings_url = admin_url('options-general.php?page=yt-perma-live-stream-embed');
+        $settings_url = admin_url('options-general.php?page=youtube-live-perma-embed');
         return sprintf(
             '<p>%s settings are missing. Please configure <a href="%s" rel="nofollow">plugin settings</a>.</p>',
             $plugin_name,
@@ -97,31 +97,31 @@ function yt_perma_live_stream_embed_shortcode($atts) {
     return $embedHtml;
 }
 
-add_shortcode('yt-perma-live-stream-embed', 'yt_perma_live_stream_embed_shortcode');
+add_shortcode('youtube-live-perma-embed', 'youtube_live_perma_embed_shortcode');
 
 // Create settings page
-function yt_perma_live_stream_embed_menu() {
+function youtube_live_perma_embed_menu() {
     global $plugin_name;
     add_options_page(
         $plugin_name . ' Settings',
         $plugin_name,
         'manage_options',
-        'yt-perma-live-stream-embed',
-        'yt_perma_live_stream_embed_settings_page'
+        'youtube-live-perma-embed',
+        'youtube_live_perma_embed_settings_page'
     );
 }
-add_action('admin_menu', 'yt_perma_live_stream_embed_menu');
+add_action('admin_menu', 'youtube_live_perma_embed_menu');
 
 // Render settings page
-function yt_perma_live_stream_embed_settings_page() {
+function youtube_live_perma_embed_settings_page() {
     global $plugin_name, $plugin_version, $plugin_author, $plugin_author_uri, $plugin_source_code_uri;
     ?>
     <div class="wrap">
         <h1><?php echo $plugin_name; ?> Settings</h1>
         <form method="post" action="options.php">
             <?php
-            settings_fields('yt_perma_live_stream_embed_options_group');
-            do_settings_sections('yt_perma_live_stream_embed');
+            settings_fields('youtube_live_perma_embed_options_group');
+            do_settings_sections('youtube_live_perma_embed');
             submit_button();
             ?>
         </form>
@@ -136,49 +136,49 @@ function yt_perma_live_stream_embed_settings_page() {
 }
 
 // Register settings
-function yt_perma_live_stream_embed_settings_init() {
-    register_setting('yt_perma_live_stream_embed_options_group', 'yt_perma_live_stream_embed_options', 'sanitize_callback');
+function youtube_live_perma_embed_settings_init() {
+    register_setting('youtube_live_perma_embed_options_group', 'youtube_live_perma_embed_options', 'sanitize_callback');
 
     add_settings_section(
-        'yt_perma_live_stream_embed_section',
+        'youtube_live_perma_embed_section',
         'YouTube API Settings',
         null,
-        'yt_perma_live_stream_embed'
+        'youtube_live_perma_embed'
     );
 
     add_settings_field(
-        'yt_perma_live_stream_embed_api_key',
+        'youtube_live_perma_embed_api_key',
         'YouTube API Key',
-        'yt_perma_live_stream_embed_api_key_render',
-        'yt_perma_live_stream_embed',
-        'yt_perma_live_stream_embed_section'
+        'youtube_live_perma_embed_api_key_render',
+        'youtube_live_perma_embed',
+        'youtube_live_perma_embed_section'
     );
 
     add_settings_field(
-        'yt_perma_live_stream_embed_channel_id',
+        'youtube_live_perma_embed_channel_id',
         'YouTube Channel ID',
-        'yt_perma_live_stream_embed_channel_id_render',
-        'yt_perma_live_stream_embed',
-        'yt_perma_live_stream_embed_section'
+        'youtube_live_perma_embed_channel_id_render',
+        'youtube_live_perma_embed',
+        'youtube_live_perma_embed_section'
     );
 }
-add_action('admin_init', 'yt_perma_live_stream_embed_settings_init');
+add_action('admin_init', 'youtube_live_perma_embed_settings_init');
 
 // Render input fields
-function yt_perma_live_stream_embed_api_key_render() {
-    $options = get_option('yt_perma_live_stream_embed_options');
+function youtube_live_perma_embed_api_key_render() {
+    $options = get_option('youtube_live_perma_embed_options');
     ?>
-    <input type="text" name="yt_perma_live_stream_embed_options[api_key]" value="<?php echo isset($options['api_key']) ? esc_attr($options['api_key']) : ''; ?>" size="50">
+    <input type="text" name="youtube_live_perma_embed_options[api_key]" value="<?php echo isset($options['api_key']) ? esc_attr($options['api_key']) : ''; ?>" size="50">
     <p>
         <a href="https://youtu.be/ZCfrNvu6nMc" target="_blank" rel="nofollow">How to create a YouTube API key</a>
     </p>
     <?php
 }
 
-function yt_perma_live_stream_embed_channel_id_render() {
-    $options = get_option('yt_perma_live_stream_embed_options');
+function youtube_live_perma_embed_channel_id_render() {
+    $options = get_option('youtube_live_perma_embed_options');
     ?>
-    <input type="text" name="yt_perma_live_stream_embed_options[channel_id]" value="<?php echo isset($options['channel_id']) ? esc_attr($options['channel_id']) : ''; ?>" size="50">
+    <input type="text" name="youtube_live_perma_embed_options[channel_id]" value="<?php echo isset($options['channel_id']) ? esc_attr($options['channel_id']) : ''; ?>" size="50">
     <p>
         <a href="https://support.google.com/youtube/answer/3250431" target="_blank" rel="nofollow">How to find a YouTube channel ID</a>
     </p>
@@ -186,12 +186,12 @@ function yt_perma_live_stream_embed_channel_id_render() {
 }
 
 // Add a settings link on the plugin page
-function yt_perma_live_stream_action_links($links) {
-    $settings_link = '<a href="' . admin_url('options-general.php?page=yt-perma-live-stream-embed') . '">Settings</a>';
+function youtube_live_perma_embed_action_links($links) {
+    $settings_link = '<a href="' . admin_url('options-general.php?page=youtube-live-perma-embed') . '">Settings</a>';
     array_unshift($links, $settings_link); 
     return $links;
 }
 // Add the action link filter
-add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'yt_perma_live_stream_action_links');
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'youtube_live_perma_embed_action_links');
 
 ?>
